@@ -1,22 +1,29 @@
-[app]
+name: Build Android APK
 
-title = Olho de Deus
-package.name = olhodedeus
-package.domain = com.olhodedeus
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
 
-source.dir = .
-source.include_exts = py,png,jpg,kv,atlas
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
-version = 1.0.0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
 
-requirements = python3,kivy,requests,g4f,pyttsx3
+      - name: Build with Buildozer
+        uses: ArtemSydoryk/buildozer-action@v1.2
+        with:
+          command: buildozer -v android debug
+          subfolder: .
 
-orientation = portrait
-
-fullscreen = 0
-
-android.permissions = INTERNET, RECORD_AUDIO, MODIFY_AUDIO_SETTINGS
-
-[buildozer]
-log_level = 2
-warn_on_root = 1
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: OlhoDeDeus-APK
+          path: bin/*.apk
