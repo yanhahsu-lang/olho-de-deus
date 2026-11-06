@@ -1,29 +1,21 @@
-name: Build Android APK
+[app]
+title = Olho de Deus
+package.name = olhodedeus
+package.domain = org.test
+source.dir = .
+source.include_exts = py,png,jpg,kv,atlas
+version = 0.1
+requirements = python3,kivy
 
-on:
-  push:
-    branches: [ main, master ]
-  workflow_dispatch:
+orientation = portrait
+osx.kivy_version = 2.0.0
+fullscreen = 0
+android.permissions = INTERNET
+android.api = 31
+android.minapi = 21
+android.ndk = 25b
+android.archs = arm64-v8a, armeabi-v7a
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-
-      - name: Build with Buildozer
-        uses: ArtemSydoryk/buildozer-action@v1.2
-        with:
-          command: buildozer -v android debug
-          subfolder: .
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: OlhoDeDeus-APK
-          path: bin/*.apk
+[buildozer]
+log_level = 2
+warn_on_root = 1
